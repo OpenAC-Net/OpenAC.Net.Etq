@@ -168,9 +168,9 @@ Utilize o **.NET SDK 10** para a solução completa. O demo e os testes executam
 
 ```bash
 cd src
-dotnet restore OpenAC.Net.Etq.sln
-dotnet build OpenAC.Net.Etq.sln -c Release
-dotnet test --solution OpenAC.Net.Etq.sln -c Release --no-build
+dotnet restore OpenAC.Net.Etq.slnx
+dotnet build OpenAC.Net.Etq.slnx -c Release
+dotnet test --solution OpenAC.Net.Etq.slnx -c Release --no-build
 dotnet pack OpenAC.Net.Etq/OpenAC.Net.Etq.csproj -c Release -o ../nuget
 ```
 

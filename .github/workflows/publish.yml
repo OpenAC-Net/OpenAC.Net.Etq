@@ -33,15 +33,15 @@ jobs:
           10.x
 
     - name: Restore NuGet packages
-      run: dotnet restore OpenAC.Net.Etq.sln
+      run: dotnet restore OpenAC.Net.Etq.slnx
       working-directory: src
 
     - name: Build solution
-      run: dotnet msbuild OpenAC.Net.Etq.sln -property:Configuration=Release -property:platform="Any CPU"
+      run: dotnet msbuild OpenAC.Net.Etq.slnx -property:Configuration=Release -property:platform="Any CPU"
       working-directory: src
 
     - name: Run tests
-      run: dotnet test --solution OpenAC.Net.Etq.sln --configuration Release --no-build
+      run: dotnet test --solution OpenAC.Net.Etq.slnx --configuration Release --no-build
       working-directory: src
 
     - name: Pack NuGet package
