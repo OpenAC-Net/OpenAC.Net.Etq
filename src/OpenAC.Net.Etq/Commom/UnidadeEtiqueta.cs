@@ -5,10 +5,13 @@ public enum UnidadeEtiqueta
 {
     /// <summary>Milimetros.</summary>
     Milimetros = 0,
+
     /// <summary>Polegadas.</summary>
     Polegadas = 1,
+
     /// <summary>Dots.</summary>
     Dots = 2,
+
     /// <summary>DecimosDeMilimetro.</summary>
     DecimosDeMilimetro = 3
 }

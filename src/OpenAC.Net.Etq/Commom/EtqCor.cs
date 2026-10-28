@@ -1,12 +1,15 @@
 namespace OpenAC.Net.Etq.Commom;
+
 /// <summary>Cor RGBA para impressoras EscLabel.</summary>
-public readonly struct EtqCor
+public readonly struct EtqCor(byte vermelho, byte verde, byte azul, byte opacidade = 255)
 {
-    public EtqCor(byte vermelho, byte verde, byte azul, byte opacidade = 255)
-    { Vermelho = vermelho; Verde = verde; Azul = azul; Opacidade = opacidade; }
-    public byte Vermelho { get; }
-    public byte Verde { get; }
-    public byte Azul { get; }
-    public byte Opacidade { get; }
+    public byte Vermelho { get; } = vermelho;
+
+    public byte Verde { get; } = verde;
+
+    public byte Azul { get; } = azul;
+
+    public byte Opacidade { get; } = opacidade;
+
     public override string ToString() => $"{Vermelho},{Verde},{Azul},{Opacidade}";
 }

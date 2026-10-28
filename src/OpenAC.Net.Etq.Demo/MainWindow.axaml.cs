@@ -132,7 +132,8 @@ public partial class MainWindow : Window
     private async void LoadImage(object? sender, RoutedEventArgs e) => await Run(async () =>
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions { Title = "Imagem da etiqueta", AllowMultiple = false,
-            FileTypeFilter = new[] { new FilePickerFileType("Imagens") { Patterns = new[] { "*.png", "*.jpg", "*.bmp" } } } });
+            FileTypeFilter = [new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.bmp"] }]
+        });
         if (files.Count == 0) return;
         await using var input = await files[0].OpenReadAsync();
         using var output = new MemoryStream();

@@ -13,7 +13,8 @@ public class ProtocolTests
     [Arguments(ProtocoloEtq.Pplb, "A10,20,0,2,2,2,N,\"PRODUTO\"\n", "P2\n")]
     [Arguments(ProtocoloEtq.Epl2, "A10,20,0,2,2,2,N,\"PRODUTO\"\n", "P2\n")]
     [Arguments(ProtocoloEtq.ZplII, "^FO10,20^A2N,48,32^FH\\^FDPRODUTO^FS", "^PQ2\r\n^XZ\r\n")]
-    [Arguments(ProtocoloEtq.EscLabel, "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^A2N,48,32^FH\\^FDPRODUTO^FS", "^PQ2\r\n^XZ\r\n")]
+    [Arguments(ProtocoloEtq.EscLabel, "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^A2N,48,32^FH\\^FDPRODUTO^FS",
+        "^PQ2\r\n^XZ\r\n")]
     [Arguments(ProtocoloEtq.Tspl, "TEXT 10,20,\"2\",0,2,2,\"PRODUTO\"", "PRINT 2\r\n")]
     public async Task GeraTextoECopiasConformeProtocolo(ProtocoloEtq protocolo, string texto, string fim)
     {
@@ -60,7 +61,8 @@ public class ProtocolTests
     [Arguments(ProtocoloEtq.Epl2, "LO10,20,40,2", "X10,20,1,50,50")]
     [Arguments(ProtocoloEtq.Pplb, "LO10,20,40,2", "X10,20,1,50,50")]
     [Arguments(ProtocoloEtq.ZplII, "^FO10,20^GB40,2,2,B,0^FS", "^FO10,20^GB40,30,1,B,0^FS")]
-    [Arguments(ProtocoloEtq.EscLabel, "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^GB40,2,2,B,0^FS", "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^GB40,30,1,B,0^FS")]
+    [Arguments(ProtocoloEtq.EscLabel, "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^GB40,2,2,B,0^FS",
+        "^FO10,20^F(C0,0,0,255,D,255,255,255,255,D^GB40,30,1,B,0^FS")]
     [Arguments(ProtocoloEtq.Tspl, "BAR 10,20,40,2", "BOX 10,20,50,50,1")]
     public async Task GeraLinhaECaixa(ProtocoloEtq protocolo, string linha, string caixa)
     {
@@ -124,7 +126,10 @@ public class ProtocolTests
                 await Assert.That(data).Contains("SIZE 101.6 mm,50.8 mm");
                 await Assert.That(data).Contains("TEXT 203,203");
             }
-            finally { CultureInfo.CurrentCulture = anterior; }
+            finally
+            {
+                CultureInfo.CurrentCulture = anterior;
+            }
         }
     }
 
@@ -185,7 +190,8 @@ public class ProtocolTests
     private static EtqPrinter<FileConfig> Create(ProtocoloEtq protocolo)
     {
         var printer = new EtqPrinter<FileConfig> { Protocolo = protocolo };
-        printer.Configuracoes.Unidade = protocolo == ProtocoloEtq.Ppla ? UnidadeEtiqueta.DecimosDeMilimetro : UnidadeEtiqueta.Dots;
+        printer.Configuracoes.Unidade =
+            protocolo == ProtocoloEtq.Ppla ? UnidadeEtiqueta.DecimosDeMilimetro : UnidadeEtiqueta.Dots;
         printer.Configuracoes.Largura = 800;
         printer.Configuracoes.Altura = 400;
         return printer;

@@ -1,4 +1,3 @@
-using OpenAC.Net.Etq.Commom;
 namespace OpenAC.Net.Etq.Command;
 
 /// <summary>Elemento TextCommand da etiqueta.</summary>
