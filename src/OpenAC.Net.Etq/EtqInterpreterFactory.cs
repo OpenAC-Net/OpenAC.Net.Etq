@@ -7,6 +7,7 @@ using OpenAC.Net.Etq.Interpreter.Epl2;
 using OpenAC.Net.Etq.Interpreter.ZplII;
 using OpenAC.Net.Etq.Interpreter.Tspl;
 using OpenAC.Net.Etq.Interpreter.EscLabel;
+
 namespace OpenAC.Net.Etq;
 
 /// <summary>Cria o interpretador do protocolo e da página de código selecionados.</summary>
@@ -14,9 +15,13 @@ public static class EtqInterpreterFactory
 {
     public static EtqInterpreter Create(ProtocoloEtq protocolo, PaginaCodigo paginaCodigo = PaginaCodigo.pc850)
     {
-        if (!Enum.IsDefined(typeof(PaginaCodigo), paginaCodigo)) throw new ArgumentOutOfRangeException(nameof(paginaCodigo));
+        if (!Enum.IsDefined(typeof(PaginaCodigo), paginaCodigo))
+            throw new ArgumentOutOfRangeException(nameof(paginaCodigo));
+        
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var encoding = Encoding.GetEncoding((int)paginaCodigo, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+        var encoding = Encoding.GetEncoding((int)paginaCodigo, EncoderFallback.ExceptionFallback,
+            DecoderFallback.ExceptionFallback);
+        
         return protocolo switch
         {
             ProtocoloEtq.Ppla => new PplaInterpreter(encoding),

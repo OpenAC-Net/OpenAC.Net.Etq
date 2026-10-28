@@ -5,8 +5,10 @@ public enum DeteccaoEtiqueta
 {
     /// <summary>Continua.</summary>
     Continua = 0,
+
     /// <summary>Gap.</summary>
     Gap = 1,
+
     /// <summary>MarcaPreta.</summary>
     MarcaPreta = 2
 }

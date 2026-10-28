@@ -18,10 +18,13 @@ public class PrinterTests
             printer.Conectar();
             printer.Imprimir(2);
             printer.Desconectar();
-            await Assert.That(File.ReadAllBytes(file).SequenceEqual(esperado)).IsTrue();
+            await Assert.That((await File.ReadAllBytesAsync(file)).SequenceEqual(esperado)).IsTrue();
             await Assert.That(printer.QuantidadeComandos).IsEqualTo(0);
         }
-        finally { if (File.Exists(file)) File.Delete(file); }
+        finally
+        {
+            if (File.Exists(file)) File.Delete(file);
+        }
     }
 
     [Test]
@@ -45,7 +48,7 @@ public class PrinterTests
     {
         using var device = new FakeDevice { FalharAbertura = true };
         using var printer = new TestPrinter(device);
-        await Assert.That(() => printer.Conectar()).Throws<OpenException>();
+        await Assert.That(printer.Conectar).Throws<OpenException>();
         await Assert.That(device.Liberado).IsTrue();
         await Assert.That(printer.Conectado).IsFalse();
     }
@@ -57,25 +60,30 @@ public class PrinterTests
         var printer = new TestPrinter(device);
         await Assert.That(() => printer.Imprimir()).Throws<OpenException>();
         printer.Conectar();
-        await Assert.That(() => printer.Conectar()).Throws<OpenException>();
+        await Assert.That(printer.Conectar).Throws<OpenException>();
         await Assert.That(() => printer.Protocolo = ProtocoloEtq.Tspl).Throws<OpenException>();
         printer.Dispose();
         await Assert.That(device.Liberado).IsTrue();
         await Assert.That(printer.Conectado).IsFalse();
-        await Assert.That(() => printer.Conectar()).Throws<ObjectDisposedException>();
+        await Assert.That(printer.Conectar).Throws<ObjectDisposedException>();
     }
 
     [Test]
     public async Task ComandoInvalidoNaoEscreveNadaNoDispositivo()
     {
-        using var device = new FakeDevice(); using var printer = new TestPrinter(device);
-        printer.ImprimirTexto("\r^XZ", 0, 0); printer.Conectar();
+        using var device = new FakeDevice();
+        using var printer = new TestPrinter(device);
+        printer.ImprimirTexto("\r^XZ", 0, 0);
+        printer.Conectar();
         await Assert.That(() => printer.Imprimir()).Throws<ArgumentException>();
         await Assert.That(device.Envios).IsEqualTo(0);
     }
 
     private sealed class TestPrinter(FakeDevice stream) : EtqPrinter(stream.Config)
-    { protected override OpenDeviceStream CriarDispositivo() => stream; }
+    {
+        protected override OpenDeviceStream CriarDispositivo() => stream;
+    }
+
     private sealed class FakeDevice() : OpenDeviceStream(new FileConfig())
     {
         public bool FalharAbertura { get; set; }
@@ -85,7 +93,17 @@ public class PrinterTests
         protected override int Available => 0;
         protected override bool OpenInternal() => !FalharAbertura;
         protected override bool CloseInternal() => true;
-        public override void Write(byte[] dados) { if (FalharEscrita) throw new IOException("Falha simulada."); Envios++; }
-        protected override void DisposeManaged() { Liberado = true; base.DisposeManaged(); }
+
+        public override void Write(byte[] dados)
+        {
+            if (FalharEscrita) throw new IOException("Falha simulada.");
+            Envios++;
+        }
+
+        protected override void DisposeManaged()
+        {
+            Liberado = true;
+            base.DisposeManaged();
+        }
     }
 }

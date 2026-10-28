@@ -4,7 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="OpenAC.Net.Etq.Demo.Test/OpenAC.Net.Etq.Demo.Test.csproj" />
   <Project Path="OpenAC.Net.Etq.Demo/OpenAC.Net.Etq.Demo.csproj" />
   <Project Path="OpenAC.Net.Etq.Test/OpenAC.Net.Etq.Test.csproj" />
   <Project Path="OpenAC.Net.Etq/OpenAC.Net.Etq.csproj" />

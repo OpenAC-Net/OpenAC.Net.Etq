@@ -1,5 +1,4 @@
 using OpenAC.Net.Devices;
-using OpenAC.Net.Etq.Command;
 using OpenAC.Net.Etq.Commom;
 using SkiaSharp;
 using ZXing;
@@ -95,10 +94,10 @@ public class PreviewTests
     public async Task ErrosDePreviewPreservamBuffer()
     {
         using var printer = new EtqPrinter<FileConfig>();
-        printer.ImprimirComando(new byte[] { 1, 2, 3 });
+        printer.ImprimirComando([1, 2, 3]);
         await Assert.That(() => printer.GerarPreview(limparBuffer: true)).Throws<NotSupportedException>();
         await Assert.That(printer.QuantidadeComandos).IsEqualTo(1);
-        printer.Clear(); printer.ImprimirImagem(new byte[] { 1, 2, 3 }, 0, 0);
+        printer.Clear(); printer.ImprimirImagem([1, 2, 3], 0, 0);
         await Assert.That(() => printer.GerarComandos()).Throws<ArgumentException>();
         await Assert.That(printer.QuantidadeComandos).IsEqualTo(1);
     }
