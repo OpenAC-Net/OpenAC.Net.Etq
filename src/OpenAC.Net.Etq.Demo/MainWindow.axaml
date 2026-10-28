@@ -1,0 +1,90 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="OpenAC.Net.Etq.Demo.MainWindow" Title="OpenAC .Net • Etiquetas" Width="1240" Height="850"
+        MinWidth="1000" MinHeight="720" Icon="/Assets/openac.ico">
+  <Grid ColumnDefinitions="200,*">
+    <Border Background="#142D50" Padding="22,30">
+      <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <Image Source="/Assets/openac.png" Height="62" Stretch="Uniform" />
+        <TextBlock Grid.Row="1" Text="ETIQUETAS" Foreground="White" FontSize="23" FontWeight="SemiBold" Margin="0,28,0,20" />
+        <ListBox x:Name="Navigation" Grid.Row="2" Classes="navigation" SelectedIndex="0" SelectionChanged="Navigate">
+          <ListBoxItem Content="Operações" /><ListBoxItem Content="Configurações" />
+        </ListBox>
+        <TextBlock Grid.Row="4" Text="Projeto OpenAC .Net&#10;Demo multiplataforma" Foreground="#B6CEF0" FontSize="12" />
+      </Grid>
+    </Border>
+    <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Margin="26" RowSpacing="18">
+      <StackPanel><TextBlock Text="Impressão de etiquetas" FontSize="27" FontWeight="SemiBold" />
+        <TextBlock Text="Monte o layout, confira os comandos e visualize antes de imprimir." Classes="muted" Margin="0,6,0,0" /></StackPanel>
+      <Grid Grid.Row="1" x:Name="WorkPanel">
+        <Grid x:Name="OperationsPage" ColumnDefinitions="310,*" ColumnSpacing="16">
+          <ScrollViewer><StackPanel Spacing="14">
+            <Border Classes="card"><StackPanel Spacing="12">
+              <TextBlock Text="Conteúdo da etiqueta" Classes="heading" />
+              <StackPanel><TextBlock Text="Texto principal" Classes="label" /><TextBox x:Name="LabelText" Text="OPENAC .NET ETIQUETAS" /></StackPanel>
+              <StackPanel><TextBlock Text="Tipo de código de barras" Classes="label" /><ComboBox x:Name="BarcodeCombo" /></StackPanel>
+              <StackPanel><TextBlock Text="Código de barras" Classes="label" /><TextBox x:Name="BarcodeText" Text="123456789012" /></StackPanel>
+              <StackPanel><TextBlock Text="Conteúdo do QR Code" Classes="label" /><TextBox x:Name="QrText" Text="https://openac.net.br" /></StackPanel>
+              <StackPanel><TextBlock Text="Cópias" Classes="label" /><NumericUpDown x:Name="CopiesInput" Value="1" Minimum="1" Maximum="99999999" /></StackPanel>
+              <Button Content="Carregar imagem…" Click="LoadImage" />
+              <Button x:Name="GenerateButton" Content="Gerar etiqueta e preview" Classes="primary" Click="Generate" />
+              <Button x:Name="PrintButton" Content="Imprimir etiqueta" Click="Print" />
+            </StackPanel></Border>
+            <TextBlock Text="O preview funciona sem impressora. Confira o protocolo e a conexão antes de imprimir." Classes="muted" TextWrapping="Wrap" />
+          </StackPanel></ScrollViewer>
+          <Border Grid.Column="1" Classes="card" Padding="12">
+            <Grid RowDefinitions="Auto,*" RowSpacing="12">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Salvar PNG" Click="SavePreview" /><Button Content="Exportar comandos" Click="SaveCommands" />
+              </StackPanel>
+              <TabControl Grid.Row="1" x:Name="ResponseTabs">
+                <TabItem Header="Pré-visualização"><ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                  <StackPanel Margin="10" Spacing="10"><TextBlock x:Name="DimensionsText" Classes="muted" Text="Nenhuma etiqueta gerada" />
+                    <Image x:Name="PreviewImage" Stretch="Uniform" HorizontalAlignment="Stretch" MaxHeight="500" /></StackPanel>
+                </ScrollViewer></TabItem>
+                <TabItem Header="Comandos"><TextBox x:Name="CommandsText" Classes="code" /></TabItem>
+              </TabControl>
+            </Grid>
+          </Border>
+        </Grid>
+        <ScrollViewer x:Name="SettingsPage" IsVisible="False">
+          <StackPanel Spacing="16">
+            <Border Classes="card"><StackPanel Spacing="14">
+              <TextBlock Text="Impressora e etiqueta" Classes="heading" />
+              <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16" RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
+                <StackPanel><TextBlock Text="Protocolo" Classes="label" /><ComboBox x:Name="ProtocolCombo" /></StackPanel>
+                <StackPanel Grid.Column="1"><TextBlock Text="DPI" Classes="label" /><ComboBox x:Name="DpiCombo" /></StackPanel>
+                <StackPanel Grid.Column="2"><TextBlock Text="Página de código" Classes="label" /><ComboBox x:Name="EncodingCombo" /></StackPanel>
+                <StackPanel Grid.Row="1"><TextBlock Text="Largura (mm)" Classes="label" /><NumericUpDown x:Name="WidthInput" Value="100" Minimum="10" Maximum="1000" /></StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1"><TextBlock Text="Altura (mm)" Classes="label" /><NumericUpDown x:Name="HeightInput" Value="50" Minimum="10" Maximum="1000" /></StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="2"><TextBlock Text="Gap (mm)" Classes="label" /><NumericUpDown x:Name="GapInput" Value="3" Minimum="0" Maximum="100" /></StackPanel>
+                <StackPanel Grid.Row="2"><TextBlock Text="Temperatura / densidade" Classes="label" /><NumericUpDown x:Name="DensityInput" Value="10" Minimum="0" Maximum="30" /></StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1"><TextBlock Text="Velocidade (-1: padrão)" Classes="label" /><NumericUpDown x:Name="SpeedInput" Value="-1" Minimum="-1" Maximum="14" /></StackPanel>
+                <CheckBox Grid.Row="2" Grid.Column="2" x:Name="CutterCheck" Content="Usar guilhotina" VerticalAlignment="Bottom" />
+              </Grid>
+            </StackPanel></Border>
+            <Border Classes="card"><StackPanel Spacing="14">
+              <TextBlock Text="Conexão" Classes="heading" />
+              <ComboBox x:Name="ConnectionCombo" SelectionChanged="ConnectionChanged" />
+              <TextBlock x:Name="AddressLabel" Classes="label" Text="Arquivo de saída" />
+              <TextBox x:Name="AddressText" Text="etiqueta.prn" />
+              <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                <StackPanel><TextBlock Text="Porta TCP" Classes="label" /><NumericUpDown x:Name="TcpPortInput" Value="9100" Minimum="1" Maximum="65535" /></StackPanel>
+                <StackPanel Grid.Column="1"><TextBlock Text="Baud rate serial" Classes="label" /><NumericUpDown x:Name="BaudInput" Value="9600" Minimum="300" Maximum="921600" /></StackPanel>
+                <StackPanel Grid.Column="2"><TextBlock Text="Timeout (ms)" Classes="label" /><NumericUpDown x:Name="TimeoutInput" Value="3000" Minimum="100" Maximum="60000" /></StackPanel>
+              </Grid>
+              <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                <StackPanel><TextBlock Text="Bits de dados" Classes="label" /><NumericUpDown x:Name="BitsInput" Value="8" Minimum="5" Maximum="8" /></StackPanel>
+                <StackPanel Grid.Column="1"><TextBlock Text="Paridade" Classes="label" /><ComboBox x:Name="ParityCombo" /></StackPanel>
+                <StackPanel Grid.Column="2"><TextBlock Text="Bits de parada" Classes="label" /><ComboBox x:Name="StopCombo" /></StackPanel>
+                <StackPanel Grid.Column="3"><TextBlock Text="Controle de fluxo" Classes="label" /><ComboBox x:Name="FlowCombo" /></StackPanel>
+              </Grid>
+              <TextBlock Text="USB: informe o caminho do dispositivo. Bluetooth: endereço MAC ou porta RFCOMM. RAW: nome da fila de impressão." Classes="muted" TextWrapping="Wrap" />
+              <Button Content="Salvar configurações" Classes="primary" Click="SaveSettings" />
+            </StackPanel></Border>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+      <TextBlock Grid.Row="2" x:Name="StatusText" Text="Pronto. Selecione Gerar etiqueta e preview para começar." Classes="muted" TextWrapping="Wrap" />
+    </Grid>
+  </Grid>
+</Window>
